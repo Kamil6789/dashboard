@@ -13,6 +13,8 @@ import Weather from './components/Weather.vue'
 import Todo from './components/Todo.vue'
 import Footer from './components/Footer.vue'
 
+import './css/style.css'
+
 export default {
     name: 'Dashboard',
     components: {
