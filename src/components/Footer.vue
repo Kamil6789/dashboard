@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import '../css/components.css'
+
 export default {
     name: 'Footer'
 }
