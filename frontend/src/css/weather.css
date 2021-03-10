@@ -1,3 +1,6 @@
 #weather-container {
+    background: url("../images/background.jpg"); /* https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-325139/ */
+    background-repeat: no-repeat;
+    background-size: cover;
     height: 100vh;
 }
