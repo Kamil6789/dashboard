@@ -1,3 +1,36 @@
+:root {
+    --primary-color: #000000;
+    --second-color: #686868b0;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color); 
+}
+
+::-webkit-scrollbar-track{
+    box-shadow: inset 0 0 10px var(--second-color);
+}
+
+::selection {
+    color: white;
+    background: var(--second-color);
+}
+
+* {
+    margin: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--general-color) var(--second-color);
+}
+
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    overflow-x: hidden;
+}
+
 hr {
     height: 4px;
     border: 0px;
