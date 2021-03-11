@@ -1,8 +1,15 @@
 module.exports = {
-    devServer: {
+    devServer:{
+        host: 'localhost',
+        hot: true,
+        port: 8080,  
+        publicPath: "/",
         disableHostCheck: true,
-        port: 8080,
-        public: '0.0.0.0:8080'
-    },
-    publicPath: "/"
+        proxy: {
+            "/api/*":  {
+                target: "http://localhost:3000",
+                secure: false
+            }
+        }
+    }
 }
