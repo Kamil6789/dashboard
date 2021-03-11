@@ -47,6 +47,9 @@ export default {
                     const response = await axios.get(`/api/weather/city?q=${this.search}`);
                     this.loading = false;
                     this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
+                    if(response.data.success == true) {
+                        this.$cookie.set('place', response.data.data.city.name, 180);
+                    }
                 } catch(err) {
                     this.body = {success: false, error: "OTHER"}
                 }
@@ -60,11 +63,27 @@ export default {
                         const response = await axios.get(`/api/weather/location?lat=${loc.coords.latitude}&lon=${loc.coords.longitude}`);
                         this.loading = false;
                         this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
+                        if(response.data.success == true) {
+                            this.$cookie.set('place', response.data.data.city.name, 180);
+                        }
                     }, error, {timeout: 5000})
                 } catch(err) {
                     this.loading = false;
                     this.body = {success: false, error: "OTHER"}
                 }
+            }
+        }
+    },
+    async created() {
+        const place = this.$cookie.get('place');
+        if(place) {
+            this.loading = true;
+            try {
+                const response = await axios.get(`/api/weather/city?q=${place}`);
+                this.loading = false;
+                this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
+            } catch(err) {
+                this.body = {success: false, error: "OTHER"}
             }
         }
     },
