@@ -8,3 +8,10 @@
 input.search {
     background: rgba(255, 255, 255, 0.8);
 }
+
+div.alert-weather {
+    background: rgba(251, 138, 138, 0.8);
+    border: 1px solid rgba(250, 95, 95, 0.8);
+    width: 80%;
+    margin: 0 auto;
+}

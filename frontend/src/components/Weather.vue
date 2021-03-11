@@ -18,8 +18,11 @@
                         <div v-if="(body !== 'none') && (body.success == true)">
                             {{body.data.city.name}}
                         </div>
-                        <div v-else>
-                            {{body.error}}
+                        <div v-else-if="body.error">
+                            <div class="alert alert-danger alert-dismissible alert-weather">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                {{errors[body.error]}}
+                            </div>
                         </div>
                     </div>
                 </div>   
@@ -57,12 +60,12 @@ export default {
                 try {
                     const error = () => {
                         this.loading = false;
-                        this.body = {success: false, error: "DENIED"}
+                        this.body = {success: false, error: "ACCESS_DENIED"}
                     }
                     navigator.geolocation.getCurrentPosition(async loc => {
                         const response = await axios.get(`/api/weather/location?lat=${loc.coords.latitude}&lon=${loc.coords.longitude}`);
                         this.loading = false;
-                        this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
+                        this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND_LOC"});
                         if(response.data.success == true) {
                             this.$cookie.set('place', response.data.data.city.name, 180);
                         }
@@ -91,7 +94,13 @@ export default {
         return {
             loading: false,
             search: this.search,
-            body: "none"
+            body: "none",
+            errors: {
+                OTHER: "Wystąpił nieznany błąd.",
+                NOT_FOUND: "Nie odnaleziono podanej miejscowości.",
+                NOT_FOUND_LOC: "Nie odnaleziono pogody dla twojej lokalizacji.",
+                ACCESS_DENIED: "Nie udzielono pozwolenia na użycie lokalizacji lub twoja przeglądarka nie obsługuje tej funkcji."
+            }
         };
     }
 }
