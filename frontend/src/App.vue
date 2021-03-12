@@ -2,9 +2,7 @@
     <div id="app">
         <Navbar />
         <Weather />
-        <hr>
         <Todo />
-        <hr>
         <Footer />
     </div>
 </template>
