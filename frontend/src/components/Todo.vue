@@ -1,21 +1,67 @@
 <template>
-    <div id="todo-container">
-        <h1>To do</h1>
-        <!-- Projects -->
-        <div class="row project" v-for="project in projects" :key="project.id">
-            <div class="col-12">
-                <h2>{{ project.name }}</h2>
-                <!-- Sections -->
-                <div class="row section" v-for="section in getSectionsFromProject(project)" :key="section.id">
-                    <div class="col-12">
-                        <h4>{{ section.name }}</h4>
-                        <!-- Tasks -->
-                        <div class="row task" v-for="task in getTasksFromSection(section)" :key="task.id">
-                            <div class="col-12">
-                                <h6>{{ task.content }}</h6>
+    <div id="todo-body" class="row">
+        <div class="col-12">
+            <!-- Container with tasks -->
+            <div id="todo-container" class="row">
+                <div class="col-12">
+                    <h1>Do zrobienia</h1>
+                    <!-- Projects -->
+                    <div class="row project" v-for="project in projects" :key="project.id">
+                        <div class="col-12">
+                            <h2><b>{{ project.name }}</b></h2>
+                            <!-- Tasks without section -->
+                            <a href="#task-details" class="row task" @click="selected = task.id" v-for="task in getTasksWithoutSection(project)" :key="task.id">
+                                <div class="col-12">
+                                    <p>{{ task.content }}</p>
+                                </div>
+                            </a>
+                            <!-- Sections -->
+                            <div class="row section" v-for="section in getSectionsFromProject(project)" :key="section.id">
+                                <div class="col-12">
+                                    <h4>{{ section.name }}</h4>
+                                    <!-- Tasks -->
+                                    <a href="#task-details" class="row task" @click="selected = task.id" v-for="task in getTasksFromSection(section)" :key="task.id">
+                                        <div class="col-12">
+                                            <p>{{ task.content }}</p>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <!-- Task details -->
+            <div id="task-details" class="row" v-if="selected != 0">
+                <div class="col-12">
+                    <h2>{{ getTaskByID(selected).content }}</h2>
+                    <p>Dodano: {{ new Date(getTaskByID(selected).created).toLocaleString("pl-PL") }}</p>
+                    <!-- Subtasks -->
+                    <div v-if="hasSubtasks(getTaskByID(selected))">
+                        <h4>Pod-zadania:</h4>
+                        <a href="#task-details" class="row task" @click="selected = task.id" v-for="task in getSubtasks(getTaskByID(selected))" :key="task.id">
+                            <div class="col-12">
+                                <p>{{ task.content }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Comments -->
+                    <div v-if="getTaskByID(selected).comment_count > 0">
+                        <h4>Komentarze:</h4>
+                        <div class="comment" v-for="comment in getCommentsFromTask(getTaskByID(selected))" :key="comment.id">
+                            <p>
+                                {{ comment.content }}
+                                <br>
+                                {{ new Date(comment.posted).toLocaleString("pl-PL") }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Labels -->
+                    <div v-if="getTaskByID(selected).label_ids.length > 0">
+                        <h4>Etykiety:</h4>
+                        <div class="label" v-for="label in getLabelsFromTask(getTaskByID(selected))" :key="label.id">{{ label.name }}</div>
+                    </div>
+                    <div id="close-details" @click="selected = 0">Zamknij szczegóły</div>
                 </div>
             </div>
         </div>
@@ -24,107 +70,156 @@
 
 <script>
 import '../css/todo.css'
+import axios from 'axios'
 
 export default {
     name: 'Todo',
     data() {
         return {
-            // Sample projects, sections and tasks.
-            projects: [
-                {
-                    id: 2203306141,
-                    name: "Shopping List",
-                    comment_count: 10,
-                    order: 1,
-                    color: 47,
-                    shared: false,
-                    sync_id: 2203843926,
-                    favorite: false,
-                    parent_id: 220325187,
-                    team_inbox: false,
-                    inbox_project: false,
-                    url: "https://todoist.com/showProject?id=2203306141&sync_id=2203843926"
-                },
-                {
-                    id: 2203306140,
-                    name: "Other Project",
-                    comment_count: 10,
-                    order: 2,
-                    color: 47,
-                    shared: false,
-                    sync_id: 2203843926,
-                    favorite: false,
-                    parent_id: 220325187,
-                    team_inbox: false,
-                    inbox_project: false,
-                    url: "https://todoist.com/showProject?id=2203306141&sync_id=2203843926"
-                }
-            ],
-            sections: [
-                {
-                    id: 7025,
-                    project_id: 2203306141,
-                    order: 1,
-                    name: "Groceries"
-                },
-                {
-                    id: 7026,
-                    project_id: 2203306140,
-                    order: 1,
-                    name: "Something Else"
-                }
-            ],
-            tasks: [
-                {
-                    assignee: 2671142,
-                    assigner: 2671362,
-                    comment_count: 0,
-                    completed: false,
-                    content: "Buy Milk",
-                    due: {
-                        date: "2016-09-01",
-                        datetime: "2016-09-01T11:00:00Z",
-                        string: "2017-07-01 12:00",
-                        timezone: "Europe/Lisbon"
-                    },
-                    id: 2995104339,
-                    order: 1,
-                    priority: 1,
-                    project_id: 2203306141,
-                    section_id: 7025,
-                    parent_id: 2995104589,
-                    url: "https://todoist.com/showTask?id=2995104339"
-                },
-                {
-                    assignee: 2671142,
-                    assigner: 2671362,
-                    comment_count: 0,
-                    completed: false,
-                    content: "Buy Something",
-                    due: {
-                        date: "2016-09-01",
-                        datetime: "2016-09-01T11:00:00Z",
-                        string: "2017-07-01 12:00",
-                        timezone: "Europe/Lisbon"
-                    },
-                    id: 2995104330,
-                    order: 1,
-                    priority: 1,
-                    project_id: 2203306141,
-                    section_id: 7026,
-                    parent_id: 2995104589,
-                    url: "https://todoist.com/showTask?id=2995104339"
-                }
-            ]
+            selected: 0,
+            projects: [],
+            sections: [],
+            tasks: [],
+            comments: [],
+            labels: []
         }
     },
     methods: {
+        // Todoist API
+        getProjects: async function () {
+            const response = await axios.get(`/api/todo/projects`);
+            return response.data.data;
+        },
+        getSections: async function () {
+            let sections = [];
+            this.projects.forEach(async project => {
+                const response = await axios.get(`/api/todo/sections?id=${project.id}`);
+                response.data.data.forEach(section => {
+                    sections.push(section);
+                });
+            });
+
+            return sections;
+        },
+        getTasks: async function () {
+            const response = await axios.get(`/api/todo/tasks`);
+            return response.data.data;
+        },
+        getComments: async function () {
+            let comments = [];
+            const tasks = await this.getTasks();
+            tasks.forEach(async task => {
+                if (task.comment_count > 0) {
+                    const response = await axios.get(`/api/todo/comments?id=${task.id}`);
+                    response.data.data.forEach(comment => {
+                        comments.push(comment);
+                    });
+                }
+            });
+
+            return comments;
+        },
+        getLabels: async function () {
+            const response = await axios.get(`/api/todo/labels`);
+            return response.data.data;
+        },
+
+        // Other methods
         getSectionsFromProject(project) {
             return this.sections.filter(s => s.project_id == project.id)
         },
         getTasksFromSection(section) {
-            return this.tasks.filter(t => t.section_id == section.id);
+            return this.tasks.filter(t => t.section_id == section.id && !this.isSubtask(t));
+        },
+        getTasksWithoutSection(project) {
+            return this.tasks.filter(t => t.project_id == project.id && !t.section_id && !this.isSubtask(t));
+        },
+        getTaskByID(id) {
+            return this.tasks.find(t => t.id == id);
+        },
+        getCommentsFromTask(task) {
+            const comments = this.comments.filter(comment => comment.task_id == task.id);
+            return comments;
+        },
+        getLabelsFromTask(task) {
+            const labels = this.labels.filter(label => task.label_ids.includes(label.id));
+            return labels;
+        },
+        getSubtasks(task) {
+            let subtasks = [];
+            this.tasks.filter(t => {
+                if (t.parent_id == task.id) {
+                    subtasks.push(t);
+                }
+            });
+
+            return subtasks;
+        },
+        hasSubtasks(task) {
+            return this.getSubtasks(task).length > 0;
+        },
+        isSubtask(task) {
+            const foundTask = this.getTaskByID(task.id);
+            return foundTask.parent_id != undefined;
+        },
+        sortData() {
+            // Remove projects without any tasks
+            let projects = [];
+            this.projects.forEach(project => {
+                let hasTasks = false;
+                this.tasks.forEach(task => {
+                    if (task.project_id == project.id) {
+                        hasTasks = true;
+                    }
+                });
+
+                if (hasTasks) {
+                    projects.push(project);
+                }
+            });
+            
+            this.projects = projects;
+
+            // Remove sections without any tasks
+            let sections = [];
+            this.sections.forEach(section => {
+                let hasTasks = false;
+                this.tasks.forEach(task => {
+                    if (task.section_id == section.id) {
+                        hasTasks = true;
+                    }
+                });
+
+                if (hasTasks) {
+                    sections.push(section);
+                }
+            });
+
+            this.sections = sections;
+
+            // Sort projects in their correct order
+            this.projects.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
+            // Sort sections in their correct order
+            this.sections.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
+            // Sort tasks in their correct order
+            this.tasks.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
+            // Sort comments by date
+            this.comments.sort((a, b) => (new Date(b.posted) - new Date(a.posted)));
+
+            // Sort labels in their correct order
+            this.labels.sort((a, b) => (a.order > b.order) ? 1 : -1);
         }
+    },
+    created: async function() {
+        this.projects = await this.getProjects();
+        this.sections = await this.getSections();
+        this.tasks = await this.getTasks();
+        this.comments = await this.getComments();
+        this.labels = await this.getLabels();
+        this.sortData();
     }
 }
 </script>

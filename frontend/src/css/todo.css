@@ -1,0 +1,70 @@
+#todo-body {
+    color: #eeeeee;
+}
+
+a {
+    color: #eeeeee;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #eeeeee;
+}
+
+h2, h4 {
+    margin: 0px 32px;
+}
+
+#todo-container {
+    padding: 32px 0px 0px 0px;
+    background-color: #282828;
+    text-align: center;
+}
+
+.project {
+    padding-top: 32px;
+}
+
+.project h2 {
+    padding-bottom: 16px;
+}
+
+.section {
+    padding: 16px 0px;
+}
+
+.section h4 {
+    padding-bottom: 16px;
+}
+
+.task {
+    padding: 16px 32px 0px 32px;
+}
+
+.task:hover {
+    background-color: #FFFFFF11;
+    cursor: pointer;
+}
+
+#task-details {
+    padding: 16px 0px;
+    background-color: #181818;
+    text-align: center;
+}
+
+#task-details h4 {
+    padding: 16px 0px;
+}
+
+.comment p {
+    padding: 0px 32px;
+}
+
+#close-details {
+    padding: 16px 32px 0px 32px;
+}
+
+#close-details:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
