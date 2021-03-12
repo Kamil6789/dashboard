@@ -61,7 +61,10 @@
                         <h4>Etykiety:</h4>
                         <div class="label" v-for="label in getLabelsFromTask(getTaskByID(selected))" :key="label.id">{{ label.name }}</div>
                     </div>
-                    <div id="close-details" @click="selected = 0">Zamknij szczegóły</div>
+                    <!-- Close details -->
+                    <div id="close-details" @click="selected = 0" title="Zamknij szczegóły">
+                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                    </div>
                 </div>
             </div>
         </div>
