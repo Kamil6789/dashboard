@@ -1,12 +1,12 @@
 #weather-container {
-    background: url("../images/background.jpg"); /* https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-325139/ */
+    background: url("../images/default.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;
 }
 
 input.search {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 div.alert-weather {

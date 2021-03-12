@@ -35,6 +35,8 @@
 import axios from 'axios'
 import {BeatLoader} from '@saeris/vue-spinners'
 
+import getBackground from '../utils/getBackground.js'
+
 import '../css/weather.css'
 
 export default {
@@ -48,6 +50,8 @@ export default {
             if(this.search) {
                 try {
                     const response = await axios.get(`/api/weather/city?q=${this.search}`);
+                    this.background = await getBackground(response.data.data.list[0].weather[0].id);
+                    this.$el.style.backgroundImage = `url(${this.background.src})`;
                     this.loading = false;
                     this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
                     if(response.data.success == true) {
@@ -64,7 +68,8 @@ export default {
                     }
                     navigator.geolocation.getCurrentPosition(async loc => {
                         const response = await axios.get(`/api/weather/location?lat=${loc.coords.latitude}&lon=${loc.coords.longitude}`);
-                        this.loading = false;
+                        this.background = await getBackground(response.data.data.list[0].weather[0].id);
+                        this.$el.style.backgroundImage = `url(${this.background.src})`;                        this.loading = false;
                         this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND_LOC"});
                         if(response.data.success == true) {
                             this.$cookie.set('place', response.data.data.city.name, 180);
@@ -83,6 +88,8 @@ export default {
             this.loading = true;
             try {
                 const response = await axios.get(`/api/weather/city?q=${place}`);
+                this.background = await getBackground(response.data.data.list[0].weather[0].id);
+                this.$el.style.backgroundImage = `url(${this.background.src})`;
                 this.loading = false;
                 this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
             } catch(err) {
@@ -94,6 +101,7 @@ export default {
         return {
             loading: false,
             search: this.search,
+            background: "",
             body: "none",
             errors: {
                 OTHER: "Wystąpił nieznany błąd.",
