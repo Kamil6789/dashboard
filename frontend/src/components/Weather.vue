@@ -16,7 +16,7 @@
                     </div>
                     <div class="mt-4" v-else>
                         <div v-if="(body !== 'none') && (body.success == true)">
-                            {{body.data.city.name}}
+                            {{body.city.name}}
                         </div>
                         <div v-else-if="body.error">
                             <div class="alert alert-danger alert-dismissible alert-weather">
@@ -36,6 +36,7 @@ import axios from 'axios'
 import {BeatLoader} from '@saeris/vue-spinners'
 
 import getBackground from '../utils/getBackground.js'
+import weatherFormat from '../utils/weatherFormat.js'
 
 import '../css/weather.css'
 
@@ -50,10 +51,10 @@ export default {
             if(this.search) {
                 try {
                     const response = await axios.get(`/api/weather/city?q=${this.search}`);
-                    this.background = await getBackground(response.data.data.list[0].weather[0].id);
+                    this.background = (response.data.success ? getBackground(response.data.data.list[0].weather[0].id) : getBackground());
+                    this.body = (response.data.success ? weatherFormat(response.data) : {success: false, error: "NOT_FOUND"});
                     this.$el.style.backgroundImage = `url(${this.background.src})`;
                     this.loading = false;
-                    this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
                     if(response.data.success == true) {
                         this.$cookie.set('place', response.data.data.city.name, 180);
                     }
@@ -68,9 +69,10 @@ export default {
                     }
                     navigator.geolocation.getCurrentPosition(async loc => {
                         const response = await axios.get(`/api/weather/location?lat=${loc.coords.latitude}&lon=${loc.coords.longitude}`);
-                        this.background = await getBackground(response.data.data.list[0].weather[0].id);
-                        this.$el.style.backgroundImage = `url(${this.background.src})`;                        this.loading = false;
-                        this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND_LOC"});
+                        this.background = (response.data.success ? getBackground(response.data.data.list[0].weather[0].id) : getBackground());
+                        this.body = (response.data.success ? weatherFormat(response.data) : {success: false, error: "NOT_FOUND_LOC"});
+                        this.$el.style.backgroundImage = `url(${this.background.src})`;
+                        this.loading = false;
                         if(response.data.success == true) {
                             this.$cookie.set('place', response.data.data.city.name, 180);
                         }
@@ -88,10 +90,10 @@ export default {
             this.loading = true;
             try {
                 const response = await axios.get(`/api/weather/city?q=${place}`);
-                this.background = await getBackground(response.data.data.list[0].weather[0].id);
-                this.$el.style.backgroundImage = `url(${this.background.src})`;
-                this.loading = false;
-                this.body = (response.data.success ? response.data : {success: false, error: "NOT_FOUND"});
+                    this.background = (response.data.success ? getBackground(response.data.data.list[0].weather[0].id) : getBackground());
+                    this.body = (response.data.success ? weatherFormat(response.data) : {success: false, error: "NOT_FOUND"});
+                    this.$el.style.backgroundImage = `url(${this.background.src})`;
+                    this.loading = false;
             } catch(err) {
                 this.body = {success: false, error: "OTHER"}
             }
