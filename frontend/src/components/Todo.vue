@@ -59,9 +59,12 @@
                     <!-- Labels -->
                     <div v-if="getTaskByID(selected).label_ids.length > 0">
                         <h4>Etykiety:</h4>
-                        <div class="label" v-for="label in getLabelsFromTask(getTaskByID(selected))" :key="label.id">{{ label.name }}</div>
+                        <TodoLabel v-for="label in getLabelsFromTask(getTaskByID(selected))" :key="label.id" :label="label" />
                     </div>
-                    <div id="close-details" @click="selected = 0">Zamknij szczegóły</div>
+                    <!-- Close details -->
+                    <div id="close-details" @click="selected = 0" title="Zamknij szczegóły">
+                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -69,11 +72,16 @@
 </template>
 
 <script>
+import TodoLabel from './TodoLabel.vue'
+
 import '../css/todo.css'
 import axios from 'axios'
 
 export default {
     name: 'Todo',
+    components: {
+        TodoLabel
+    },
     data() {
         return {
             selected: 0,

@@ -47,9 +47,13 @@ h2, h4 {
 }
 
 #task-details {
-    padding: 16px 0px;
+    padding: 16px 0px 0px 0px;
     background-color: #181818;
     text-align: center;
+}
+
+#task-details h2 {
+    margin: 0px 64px;
 }
 
 #task-details h4 {
@@ -60,8 +64,17 @@ h2, h4 {
     padding: 0px 32px;
 }
 
+.label {
+    margin-bottom: 16px;
+}
+
 #close-details {
-    padding: 16px 32px 0px 32px;
+    position: absolute;
+    top: 0px;
+    right: 32px;
+    padding: 4px 8px;
+    border: 1px solid var(--second-color);
+    border-radius: 8px;
 }
 
 #close-details:hover {
