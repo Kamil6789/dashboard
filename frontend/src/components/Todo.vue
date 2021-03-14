@@ -6,29 +6,7 @@
                 <div class="col-12">
                     <h1>Do zrobienia</h1>
                     <!-- Projects -->
-                    <div class="row project" v-for="project in projects" :key="project.id">
-                        <div class="col-12">
-                            <h2><b>{{ project.name }}</b></h2>
-                            <!-- Tasks without section -->
-                            <a href="#task-details" class="row task" @click="selected = task.id" v-for="task in getTasksWithoutSection(project)" :key="task.id">
-                                <div class="col-12">
-                                    <p>{{ task.content }}</p>
-                                </div>
-                            </a>
-                            <!-- Sections -->
-                            <div class="row section" v-for="section in getSectionsFromProject(project)" :key="section.id">
-                                <div class="col-12">
-                                    <h4>{{ section.name }}</h4>
-                                    <!-- Tasks -->
-                                    <a href="#task-details" class="row task" @click="selected = task.id" v-for="task in getTasksFromSection(section)" :key="task.id">
-                                        <div class="col-12">
-                                            <p>{{ task.content }}</p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <TodoProject v-for="project in projects" :key="project.id" :project="project" @selected="select" />
                 </div>
             </div>
             <!-- Task details -->
@@ -39,22 +17,12 @@
                     <!-- Subtasks -->
                     <div v-if="hasSubtasks(getTaskByID(selected))">
                         <h4>Pod-zadania:</h4>
-                        <a href="#task-details" class="row task" @click="selected = task.id" v-for="task in getSubtasks(getTaskByID(selected))" :key="task.id">
-                            <div class="col-12">
-                                <p>{{ task.content }}</p>
-                            </div>
-                        </a>
+                        <TodoTask v-for="task in getSubtasks(getTaskByID(selected))" :key="task.id" :task="task" :hasSection="false" :isSubtask="true" @selected="select" />
                     </div>
                     <!-- Comments -->
                     <div v-if="getTaskByID(selected).comment_count > 0">
                         <h4>Komentarze:</h4>
-                        <div class="comment" v-for="comment in getCommentsFromTask(getTaskByID(selected))" :key="comment.id">
-                            <p>
-                                {{ comment.content }}
-                                <br>
-                                {{ new Date(comment.posted).toLocaleString("pl-PL") }}
-                            </p>
-                        </div>
+                        <TodoComment v-for="comment in getCommentsFromTask(getTaskByID(selected))" :key="comment.id" :comment="comment" />
                     </div>
                     <!-- Labels -->
                     <div v-if="getTaskByID(selected).label_ids.length > 0">
@@ -72,7 +40,10 @@
 </template>
 
 <script>
-import TodoLabel from './TodoLabel.vue'
+import TodoComment from './Todo/TodoComment.vue'
+import TodoLabel from './Todo/TodoLabel.vue'
+import TodoTask from './Todo/TodoTask.vue'
+import TodoProject from './Todo/TodoProject.vue'
 
 import '../css/todo.css'
 import axios from 'axios'
@@ -80,7 +51,10 @@ import axios from 'axios'
 export default {
     name: 'Todo',
     components: {
-        TodoLabel
+        TodoComment,
+        TodoLabel,
+        TodoTask,
+        TodoProject
     },
     data() {
         return {
@@ -219,6 +193,9 @@ export default {
 
             // Sort labels in their correct order
             this.labels.sort((a, b) => (a.order > b.order) ? 1 : -1);
+        },
+        select(id) {
+            this.selected = id;
         }
     },
     created: async function() {
