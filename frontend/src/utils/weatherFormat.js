@@ -4,15 +4,15 @@ const weatherFormat = (body) => {
     let result;
     if(body.success == true) {
         let weather = {};
-        weather['list'] = [];
+        weather['list'] = {};
         for(const i in days) {
             let day = [];
             body.data.list.filter(item => days[i] == days[new Date(item.dt * 1000).getDay()]).forEach(item => {
                 day.push(item);
             });
             if((days[new Date().getDay()] == days[i]) || (day.length == 8)) {
-                weather['list'][i] = day;
-                weather['list'][i].day = days[i]
+                weather['list'][day[0].dt] = day;
+                weather['list'][day[0].dt].day = days[i];
             }
         }
         result = {
