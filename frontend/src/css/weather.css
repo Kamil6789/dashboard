@@ -85,6 +85,20 @@ img.flag {
     margin-top: -5px;
 }
 
+p.img-author {
+    color: #ffffffed;
+    text-shadow: 1px 1px black;
+    font-size: 0.9rem;
+}
+
+p.img-author > a {
+    color: #3993fa;
+}
+
+p.img-author > a:hover {
+    color: #3993fab3;
+}
+
 hr {
     border: 1px solid #ffffff17;
 }

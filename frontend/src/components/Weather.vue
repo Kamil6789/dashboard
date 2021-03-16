@@ -18,6 +18,7 @@
                         <CityInfo class="col-lg-3" :data="body" />
                         <div class="col-lg-9">
                             <WeatherDay v-for="day in body.weather" :key="day.dt" :day="day" />
+                            <p class="text-right mt-1 img-author">Zdjęcie autorstwa {{background.author}} z <a href="https://pexels.com">Pexels.com</a>.</p>
                         </div>
                     </div>
                     <div v-else-if="body.error">
