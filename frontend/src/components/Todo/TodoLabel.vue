@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import labelColors from '../../utils/labelColors.js'
+import labelColors from '../../utils/colors.js'
 
 export default {
     name: 'TodoLabel',
