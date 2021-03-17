@@ -11,7 +11,7 @@
                         <a class="nav-link" href="#weather-container"> Sprawdź pogodę</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#todo-container"> Do zrobienia</a>
+                        <a class="nav-link" href="#todo-body"> Do zrobienia</a>
                     </li>
                 </ul>
             </div>

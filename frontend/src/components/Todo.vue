@@ -7,7 +7,7 @@
                     <h1>Do zrobienia</h1>
                     <!-- Projects -->
                     <TodoProject v-for="project in getLoadedProjects()" :key="project.id" :project="project" @selected="select" />
-                    <Loader v-if="loading" class="text-center mb-2" color="#ffffffca" />
+                    <Loader v-if="loading" class="mb-5" color="#ffffffca" />
                 </div>
             </div>
             <!-- Task details -->
