@@ -1,6 +1,6 @@
 <template>
     <footer>
-        <p>Footer</p>
+        <p class="text-center mt-3">© {{new Date().getFullYear()}} Dashboard</p>
     </footer>
 </template>
 
