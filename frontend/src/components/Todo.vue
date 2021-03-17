@@ -14,7 +14,12 @@
             <div id="task-details" class="row" v-if="selected != 0">
                 <div class="col-12">
                     <h2>{{ getTaskByID(selected).content }}</h2>
-                    <p>Dodano: {{ new Date(getTaskByID(selected).created).toLocaleString("pl-PL") }}</p>
+                    <p>
+                        Dodano: {{ new Date(getTaskByID(selected).created).toLocaleString("pl-PL") }}
+                        <br>
+                        Priorytet:
+                        <i class="fa fa-flag" aria-hidden="true" :style="{ color: getPriorityColor(getTaskByID(selected)) }"></i>
+                    </p>
                     <!-- Subtasks -->
                     <div v-if="hasSubtasks(getTaskByID(selected))">
                         <h4>Pod-zadania:</h4>
@@ -50,6 +55,8 @@ import {BeatLoader} from '@saeris/vue-spinners'
 
 import '../css/todo.css'
 import axios from 'axios'
+
+import {priorities} from '../utils/colors.js'
 
 export default {
     name: 'Todo',
@@ -134,6 +141,9 @@ export default {
         getLabelsFromTask(task) {
             const labels = this.labels.filter(label => task.label_ids.includes(label.id));
             return labels;
+        },
+        getPriorityColor(task) {
+            return priorities.find(color => color.id == task.priority).color;
         },
         getSubtasks(task) {
             let subtasks = [];

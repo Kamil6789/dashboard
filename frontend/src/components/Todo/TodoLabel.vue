@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import labelColors from '../../utils/colors.js'
+import {labels} from '../../utils/colors.js'
 
 export default {
     name: 'TodoLabel',
@@ -17,7 +17,7 @@ export default {
     },
     computed: {
         color() {
-            return labelColors.find(color => color.id == this.label.color).color;
+            return labels.find(color => color.id == this.label.color).color;
         }
     }
 }

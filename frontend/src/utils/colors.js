@@ -1,4 +1,4 @@
-const labelColors = [
+const labels = [
     { id: 30, color: "#b8255f" },
     { id: 31, color: "#db4035" },
     { id: 32, color: "#ff9933" },
@@ -21,4 +21,14 @@ const labelColors = [
     { id: 49, color: "#ccac93" }
 ];
 
-export default labelColors;
+const priorities = [
+    { id: 1, color: "#eeeeee" },
+    { id: 2, color: "#5297ff" },
+    { id: 3, color: "#ff9a14" },
+    { id: 4, color: "#ff7066" }
+];
+
+export {
+    labels,
+    priorities
+}
