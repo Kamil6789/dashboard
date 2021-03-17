@@ -6,7 +6,8 @@
                 <div class="col-12">
                     <h1>Do zrobienia</h1>
                     <!-- Projects -->
-                    <TodoProject v-for="project in projects" :key="project.id" :project="project" @selected="select" />
+                    <TodoProject v-for="project in getLoadedProjects()" :key="project.id" :project="project" @selected="select" />
+                    <Loader v-if="loading" class="text-center mb-2" color="#ffffffca" />
                 </div>
             </div>
             <!-- Task details -->
@@ -45,6 +46,8 @@ import TodoLabel from './Todo/TodoLabel.vue'
 import TodoTask from './Todo/TodoTask.vue'
 import TodoProject from './Todo/TodoProject.vue'
 
+import {BeatLoader} from '@saeris/vue-spinners'
+
 import '../css/todo.css'
 import axios from 'axios'
 
@@ -54,10 +57,12 @@ export default {
         TodoComment,
         TodoLabel,
         TodoTask,
-        TodoProject
+        TodoProject,
+        'Loader': BeatLoader
     },
     data() {
         return {
+            loading: true,
             selected: 0,
             projects: [],
             sections: [],
@@ -107,6 +112,9 @@ export default {
         },
 
         // Other methods
+        getLoadedProjects() {
+            return this.loading ? null : this.projects;
+        },
         getSectionsFromProject(project) {
             return this.sections.filter(s => s.project_id == project.id)
         },
@@ -205,6 +213,7 @@ export default {
         this.comments = await this.getComments();
         this.labels = await this.getLabels();
         this.sortData();
+        this.loading = false;
     }
 }
 </script>
