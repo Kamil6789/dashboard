@@ -18,7 +18,7 @@
                         Dodano: {{ new Date(getTaskByID(selected).created).toLocaleString("pl-PL") }}
                         <br>
                         Priorytet:
-                        <i class="fa fa-flag" aria-hidden="true" :style="{ color: getPriorityColor(getTaskByID(selected)) }"></i>
+                        <i class="fa fa-flag align-middle" aria-hidden="true" :style="{ color: getPriorityColor(getTaskByID(selected)) }"></i>
                     </p>
                     <!-- Subtasks -->
                     <div v-if="hasSubtasks(getTaskByID(selected))">
