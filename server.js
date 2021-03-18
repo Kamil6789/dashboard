@@ -12,6 +12,12 @@ app.use(cors());
 require("./routes/weather")(app);
 require("./routes/todo")(app);
 
+app.use(express.static("frontend/dist"));
+
+app.get("/", (req, res) => {
+    res.sendFile("frontend/dist/index.html");
+});
+
 app.listen((process.env.PORT || 3000), function() {
     console.log("Express is running.");
 });
