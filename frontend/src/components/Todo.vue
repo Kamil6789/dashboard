@@ -15,10 +15,20 @@
                 <div class="col-12">
                     <h2>{{ getTaskByID(selected).content }}</h2>
                     <p>
-                        Dodano: {{ new Date(getTaskByID(selected).created).toLocaleString("pl-PL") }}
+                        <span>
+                            Dodano:
+                            {{ new Date(getTaskByID(selected).created).toLocaleString("pl-PL") }}
+                        </span>
                         <br>
-                        Priorytet:
-                        <i class="fa fa-flag align-middle" aria-hidden="true" :style="{ color: getPriorityColor(getTaskByID(selected)) }"></i>
+                        <span v-if="getTaskDeadline(getTaskByID(selected))">
+                            Termin:
+                            {{ getTaskDeadline(getTaskByID(selected)) }}
+                        </span>
+                        <br v-if="getTaskDeadline(getTaskByID(selected))">
+                        <span>
+                            Priorytet:
+                            <i class="fa fa-flag align-middle" aria-hidden="true" :style="{ color: getPriorityColor(getTaskByID(selected)) }"></i>
+                        </span>
                     </p>
                     <!-- Subtasks -->
                     <div v-if="hasSubtasks(getTaskByID(selected))">
@@ -133,6 +143,19 @@ export default {
         },
         getTaskByID(id) {
             return this.tasks.find(t => t.id == id);
+        },
+        getTaskDeadline(task) {
+            if (task.due) {
+                if (task.due.datetime) {
+                    return new Date(task.due.datetime).toLocaleString("pl-PL");
+                }
+                else {
+                    return new Date(task.due.date).toLocaleString("pl-PL").split(",")[0];
+                }
+            }
+            else {
+                return null;
+            }
         },
         getCommentsFromTask(task) {
             const comments = this.comments.filter(comment => comment.task_id == task.id);
