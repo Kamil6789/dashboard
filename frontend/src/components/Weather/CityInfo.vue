@@ -22,11 +22,11 @@
                 <p class="info">Zachmurzenia: <span class="badge badge-weather">{{data.weather[Object.keys(data.weather)[0]][0].clouds.all}}%</span></p>
                 <p class="info">Wilgotność: <span class="badge badge-weather">{{data.weather[Object.keys(data.weather)[0]][0].main.humidity}}%</span></p>
                 <p class="info">Ciśnienie: <span class="badge badge-weather">{{data.weather[Object.keys(data.weather)[0]][0].main.grnd_level}} hPa</span></p>
-                <hr>
+                <hr class="d-md-none d-lg-block"> <!-- Hide on md screens -->
             </div>
             <div class="col-xl-12 col-lg-12 col-md-6">
                 <h5>Faza księżyca:</h5>
-                <img :src="getMoonIcon(phase)">
+                <img alt="" :src="getMoonIcon(phase)">
                 <p class="info">{{moon[phase]}}</p>
             </div>
         </div>
