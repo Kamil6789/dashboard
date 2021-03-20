@@ -47,6 +47,7 @@ div.alert-weather {
 div.weather-day {
     background: #00000086;
     color: #eeeeee;
+    height: max-content;
 }
 
 span.time {
