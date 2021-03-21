@@ -1,5 +1,5 @@
 <template>
-    <div id="todo-body" class="row">
+    <section id="todo-body" class="row">
         <div class="col-12">
             <!-- Container with tasks -->
             <div id="todo-container" class="row">
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
