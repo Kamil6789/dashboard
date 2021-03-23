@@ -115,7 +115,7 @@ export default {
             tasks.forEach(async task => {
                 if (task.comment_count > 0) {
                     const response = await axios.get(`/api/todo/comments?id=${task.id}`);
-                    response.data.data.forEach(comment => {
+                    response.data.data.reverse().forEach(comment => {
                         comments.push(comment);
                     });
                 }
@@ -228,9 +228,6 @@ export default {
 
             // Sort tasks in their correct order
             this.tasks.sort((a, b) => (a.order > b.order) ? 1 : -1);
-
-            // Sort comments by date
-            this.comments.sort((a, b) => (new Date(b.posted) - new Date(a.posted)));
 
             // Sort labels in their correct order
             this.labels.sort((a, b) => (a.order > b.order) ? 1 : -1);
